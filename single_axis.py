@@ -13,7 +13,11 @@ def write_i2c_block(address, data):
     time.sleep(0.01)  # Small delay to ensure the command is processed
 
 def read_i2c_block(address, length):
-    return bus.read_i2c_block_data(DEVICE_ADDRESS, address, length)
+    try:
+        return bus.read_i2c_block_data(DEVICE_ADDRESS, address, length)
+    except OSError as e:
+        print(f"Error reading I2C data: {e}")
+        return None
 
 # Sequence of writes to initialize the sensor
 write_i2c_block(0x0A, [0, 0])
@@ -26,10 +30,13 @@ write_i2c_block(0x00, [0, 1])
 # Function to read data from the sensor
 def read_sensor_data():
     data = read_i2c_block(0x00, 2)  # Read 2 bytes from register 0x00
-    integer_part = data[0]
-    fractional_part = data[1]
-    angle = integer_part + fractional_part / 256.0  # Assuming fractional part is in 1/256 units
-    return angle
+    if data is not None:
+        integer_part = data[0]
+        fractional_part = data[1]
+        angle = integer_part + fractional_part / 256.0  # Assuming fractional part is in 1/256 units
+        return angle
+    else:
+        return None
 
 # Moving average filter
 class MovingAverage:
@@ -48,8 +55,11 @@ try:
 
     while True:
         angle = read_sensor_data()
-        smoothed_angle = moving_average.add(angle)
-        print(f"Smoothed Angle: {smoothed_angle:.2f} degrees")
+        if angle is not None:
+            smoothed_angle = moving_average.add(angle)
+            print(f" {smoothed_angle:.2f}")
+        else:
+            print("Failed to read sensor data.")
         time.sleep(0.1)  # Adjust the sleep time as needed (e.g., for 10Hz sampling rate, use 0.1s)
 except KeyboardInterrupt:
     print("Program stopped")
