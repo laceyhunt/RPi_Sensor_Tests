@@ -12,11 +12,11 @@ GPIO.setup(reset_pin, GPIO.OUT) # reset
 GPIO.setup(input_pin, GPIO.IN) # input
 
 # set reset low, wait, high, wait
-GPIO.output(reset_pin,GPIO.LOW)
-time.sleep(0.01)
-GPIO.output(reset_pin,GPIO.HIGH)
-print("done with GPIO init")
-time.sleep(4)
+# GPIO.output(reset_pin,GPIO.LOW)
+# time.sleep(0.01)
+# GPIO.output(reset_pin,GPIO.HIGH)
+# print("done with GPIO init")
+# time.sleep(4)
 
 # Initialize I2C bus
 bus = smbus.SMBus(1)  # 1 indicates /dev/i2c-1
@@ -45,37 +45,39 @@ def read_sensor_data():
         return None
 
 # Sequence of writes to initialize the sensor
-write_i2c_block(0x0A, [0, 0])
-time.sleep(0.1)
-while GPIO.input(input_pin)!=GPIO.LOW:
-    pass
+# while GPIO.input(input_pin)!=GPIO.LOW:
+#     pass
+# write_i2c_block(0x0A, [0, 0])
+# time.sleep(0.1)
+# while GPIO.input(input_pin)!=GPIO.LOW:
+#     pass
 
-data=read_i2c_block(0x02, 2)
-print(data)
-time.sleep(0.1)
+# data=read_i2c_block(0x02, 2)
+# print(data)
+# time.sleep(0.1)
 
-write_i2c_block(0x0A, [0, 3])
-time.sleep(0.1)
+# write_i2c_block(0x0A, [0, 3])
+# time.sleep(0.1)
 
-data=read_i2c_block(0x02, 2)
-print(data)
-time.sleep(0.1)
+# data=read_i2c_block(0x02, 2)
+# print(data)
+# time.sleep(0.1)
 
-write_i2c_block(0x06, [0, 0])
-time.sleep(0.1)
+# write_i2c_block(0x06, [0, 0])
+# time.sleep(0.1)
 
-data=read_i2c_block(0x01, 2)
-print(data)
-time.sleep(0.1)
+# data=read_i2c_block(0x01, 2)
+# print(data)
+# time.sleep(0.1)
 
-write_i2c_block(0x01, [0xA3, 00])
-time.sleep(0.1)
+# write_i2c_block(0x01, [0xA3, 00])
+# time.sleep(0.1)
 
-write_i2c_block(0x09, [0, 0])
-time.sleep(0.1)
+# write_i2c_block(0x09, [0, 0])
+# time.sleep(0.1)
 
-write_i2c_block(0x01, [0xA3, 00])
-time.sleep(0.1)
+# write_i2c_block(0x01, [0xA3, 00])
+# time.sleep(0.1)
 
 write_i2c_block(0x00, [1, 00])
 time.sleep(0.1)
