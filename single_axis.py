@@ -3,12 +3,21 @@ import time
 from collections import deque
 import RPi.GPIO as GPIO
 
+print("starting...")
 # Initialize GPIO pins
 reset_pin=17
 input_pin=27
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
 GPIO.setup(reset_pin, GPIO.OUT) # reset
 GPIO.setup(input_pin, GPIO.IN) # input
+
+# set reset low, wait, high, wait
+GPIO.output(reset_pin,0)
+time.sleep(0.5)
+GPIO.output(reset_pin,1)
+time.sleep(0.5)
+
+print("done with GPIO init")
 
 # Initialize I2C bus
 bus = smbus.SMBus(1)  # 1 indicates /dev/i2c-1
@@ -36,12 +45,6 @@ def read_sensor_data():
     else:
         return None
 
-# set reset low, wait, high, wait
-GPIO.output(reset_pin,0)
-time.sleep(0.5)
-GPIO.output(reset_pin,1)
-time.sleep(0.5)
-
 # Sequence of writes to initialize the sensor
 write_i2c_block(0x0A, [0, 0])
 time.sleep(0.5)
@@ -51,6 +54,7 @@ write_i2c_block(0x05, [0, 1])
 time.sleep(0.5)
 write_i2c_block(0x00, [0, 1])
 time.sleep(0.5)
+print("Done with i2c init")
 
 # Now the sensor should be running
 
@@ -66,20 +70,24 @@ class MovingAverage:
 
 # Main loop to continuously read from the sensor
 try:
-    filter_size = 10  # Size of the moving average filter
-    moving_average = MovingAverage(filter_size)
+    # filter_size = 10  # Size of the moving average filter
+    # moving_average = MovingAverage(filter_size)
 
     while True:
         angle = read_sensor_data()
         if angle is not None:
-            pass
+            pass # because read_sensor_data handles printing raw data
             # smoothed_angle = moving_average.add(angle)
             # print(f" {smoothed_angle:.2f}")
         else:
             print("Failed to read sensor data.")
         # change to just read when interrupted
         # time.sleep(0.1)  # Adjust the sleep time as needed (e.g., for 10Hz sampling rate, use 0.1s)
-        while GPIO.input(input_pin)!=0:
+        inp=GPIO.input(input_pin)
+        # while GPIO.input(input_pin)!=0:
+        while inp!=0:
+            print(f"Input={inp}")
+            inp=GPIO.input(input_pin)
             pass
 
 except KeyboardInterrupt:
