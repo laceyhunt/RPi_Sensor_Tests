@@ -12,11 +12,11 @@ GPIO.setup(reset_pin, GPIO.OUT) # reset
 GPIO.setup(input_pin, GPIO.IN) # input
 
 # set reset low, wait, high, wait
-# GPIO.output(reset_pin,GPIO.LOW)
-# time.sleep(0.01)
-# GPIO.output(reset_pin,GPIO.HIGH)
-# print("done with GPIO init")
-# time.sleep(4)
+GPIO.output(reset_pin,GPIO.LOW)
+time.sleep(0.01)
+GPIO.output(reset_pin,GPIO.HIGH)
+print("done with GPIO init")
+time.sleep(2)
 
 # Initialize I2C bus
 bus = smbus.SMBus(1)  # 1 indicates /dev/i2c-1
