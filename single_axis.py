@@ -49,7 +49,7 @@ def read_sensor_data():
 write_i2c_block(0x0A, [0, 0])
 time.sleep(0.1)
 
-data=read_i2c_block(0x02, 3)
+data=read_i2c_block(0x02, 1)
 print(data)
 time.sleep(0.1)
 
