@@ -5,8 +5,8 @@ import RPi.GPIO as GPIO
 
 print("starting...")
 # Initialize GPIO pins
-reset_pin=17
-input_pin=27
+reset_pin=27
+input_pin=22
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
 GPIO.setup(reset_pin, GPIO.OUT) # reset
 GPIO.setup(input_pin, GPIO.IN) # input
