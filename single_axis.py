@@ -47,13 +47,37 @@ def read_sensor_data():
 
 # Sequence of writes to initialize the sensor
 write_i2c_block(0x0A, [0, 0])
-time.sleep(0.5)
-write_i2c_block(0x0A, [0, 3])
-time.sleep(0.5)
-write_i2c_block(0x05, [0, 1])
-time.sleep(0.5)
-write_i2c_block(0x00, [0, 1])
-time.sleep(0.5)
+time.sleep(0.1)
+
+data=read_i2c_block(0x02, 2)
+print(data)
+time.sleep(0.1)
+
+write_i2c_block(0x0A, [3, 0])
+time.sleep(0.1)
+
+data=read_i2c_block(0x02, 2)
+print(data)
+time.sleep(0.1)
+
+write_i2c_block(0x06, [0, 0])
+time.sleep(0.1)
+
+data=read_i2c_block(0x01, 2)
+print(data)
+time.sleep(0.1)
+
+write_i2c_block(0x01, [0xA3, 00])
+time.sleep(0.1)
+
+write_i2c_block(0x09, [0, 0])
+time.sleep(0.1)
+
+write_i2c_block(0x01, [0xA3, 00])
+time.sleep(0.1)
+
+write_i2c_block(0x00, [1, 00])
+time.sleep(0.1)
 print("Done with i2c init")
 
 # Now the sensor should be running
