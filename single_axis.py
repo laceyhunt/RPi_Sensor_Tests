@@ -96,10 +96,10 @@ class MovingAverage:
         return sum(self.buffer) / len(self.buffer)
 
 # Callback function for data ready interrupt
-def data_ready_callback(channel):
-    print("Data ready pin went low, reading sensor data...")
-    read_sensor_data()
-GPIO.add_event_detect(input_pin, GPIO.FALLING, callback=data_ready_callback)
+# def data_ready_callback(channel):
+#     print("Data ready pin went low, reading sensor data...")
+#     read_sensor_data()
+# GPIO.add_event_detect(input_pin, GPIO.FALLING, callback=data_ready_callback)
 
 print("Waiting for data ready interrupt...")
 
@@ -108,8 +108,8 @@ try:
     # filter_size = 10  # Size of the moving average filter
     # moving_average = MovingAverage(filter_size)
 
-    # while True:
-    #     angle = read_sensor_data()
+    while True:
+        angle = read_sensor_data()
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
     #         # smoothed_angle = moving_average.add(angle)
@@ -119,14 +119,11 @@ try:
     #     # change to just read when interrupted
     #     # time.sleep(0.1)  # Adjust the sleep time as needed (e.g., for 10Hz sampling rate, use 0.1s)
     #     # inp=GPIO.input(input_pin)
-    #     while GPIO.input(input_pin)!=GPIO.LOW:
+        while GPIO.input(input_pin)!=GPIO.LOW:
     #     # while inp!=0:
     #         # print(f"Input={inp}")
     #         # inp=GPIO.input(input_pin)
-    #         pass
-
-    while True:
-        time.sleep(1)
+            pass
 
 except KeyboardInterrupt:
     print("Program stopped, cleaning up...")
