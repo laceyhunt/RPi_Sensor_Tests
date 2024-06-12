@@ -84,7 +84,7 @@ try:
         # change to just read when interrupted
         # time.sleep(0.1)  # Adjust the sleep time as needed (e.g., for 10Hz sampling rate, use 0.1s)
         # inp=GPIO.input(input_pin)
-        while GPIO.input(input_pin)!=0:
+        while GPIO.input(input_pin)!=GPIO.LOW:
         # while inp!=0:
             # print(f"Input={inp}")
             # inp=GPIO.input(input_pin)
@@ -93,4 +93,5 @@ try:
 except KeyboardInterrupt:
     print("Program stopped")
     GPIO.cleanup()
+    bus.close()
     quit()
