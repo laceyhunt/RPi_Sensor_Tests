@@ -12,9 +12,9 @@ GPIO.setup(reset_pin, GPIO.OUT) # reset
 GPIO.setup(input_pin, GPIO.IN) # input
 
 # set reset low, wait, high, wait
-GPIO.output(reset_pin,GPIO.HIGH)
-time.sleep(0.5)
 GPIO.output(reset_pin,GPIO.LOW)
+time.sleep(0.5)
+GPIO.output(reset_pin,GPIO.HIGH)
 time.sleep(0.5)
 
 print("done with GPIO init")
