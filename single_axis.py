@@ -53,7 +53,7 @@ data=read_i2c_block(0x02, 2)
 print(data)
 time.sleep(0.1)
 
-write_i2c_block(0x0A, [3, 0])
+write_i2c_block(0x0A, [0, 3])
 time.sleep(0.1)
 
 data=read_i2c_block(0x02, 2)
