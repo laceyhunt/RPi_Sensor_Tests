@@ -69,9 +69,18 @@ def read_sensor_data():
 # data=read_i2c_block(0x01, 2)
 # print(data)
 # time.sleep(0.1)
-
-# write_i2c_block(0x01, [0xA3, 00])
-# time.sleep(0.1)
+"""
+    ADS_1_HZ   = 16384,					// 1 sample per second, Interrupt Mode
+	ADS_10_HZ  = 1638,					// 10 samples per second, Interrupt Mode
+	ADS_20_HZ  = 819,					// 20 samples per second, Interrupt Mode
+	ADS_50_HZ  = 327,					// 50 samples per second, Interrupt Mode
+	ADS_100_HZ = 163,					// 100 samples per second, Interrupt Mode
+	ADS_200_HZ = 81,					// 200 samples per second, Interrupt Mode, max rate for bend + stretch
+	ADS_333_HZ = 49,					// 333 samples per second, Interrupt Mode
+	ADS_500_HZ = 32,					// 500 samples per second, Interrupt Mode, max rate
+"""
+write_i2c_block(0x01, [819, 00])
+time.sleep(0.1)
 
 # write_i2c_block(0x09, [0, 0])
 # time.sleep(0.1)
