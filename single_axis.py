@@ -118,8 +118,9 @@ try:
     # moving_average = MovingAverage(filter_size)
 
     while True:
-        angle = read_sensor_data()
+        # angle = read_sensor_data()
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+        angle = read_sensor_data()
         time.sleep(0.05)
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
