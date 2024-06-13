@@ -39,6 +39,7 @@ def read_sensor_data():
     # Example usage
     # data = bytes([0x34, 0x12])
     decoded_value = ads_int16_decode(data)
+    decoded_value = decoded_value/64
     print(f"decoded: {decoded_value}") 
     if data is not None:
         integer_part = data[0]
@@ -136,10 +137,8 @@ try:
     # moving_average = MovingAverage(filter_size)
 
     while True:
-        # angle = read_sensor_data()
-        write_i2c_block(0x00, [1, 00]) # RUN COMMAND
         angle = read_sensor_data()
-        angle = angle/64
+        write_i2c_block(0x00, [1, 00]) # RUN COMMAND
         time.sleep(0.05)
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
