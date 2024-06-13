@@ -139,6 +139,7 @@ try:
         # angle = read_sensor_data()
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
         angle = read_sensor_data()
+        angle = angle/64
         time.sleep(0.05)
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
