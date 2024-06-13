@@ -38,7 +38,7 @@ def read_sensor_data():
     print(f"raw: {data}")
     # Example usage
     # data = bytes([0x34, 0x12])
-    decoded_value = ads_int16_decode(data)
+    decoded_value = int(ads_int16_decode(data))
     decoded_value = decoded_value/64
     print(f"decoded: {decoded_value}") 
     if data is not None:
@@ -49,15 +49,6 @@ def read_sensor_data():
     else:
         return None
 def ads_int16_decode(p_encoded_data):
-    """
-    Decode a 16-bit signed integer from a sequence of two bytes.
-
-    Args:
-        p_encoded_data (bytes): A bytes object containing at least two bytes.
-
-    Returns:
-        int: The decoded 16-bit signed integer.
-    """
     if len(p_encoded_data) < 2:
         raise ValueError("Input data must contain at least two bytes")
 
