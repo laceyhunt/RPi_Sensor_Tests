@@ -22,7 +22,7 @@ time.sleep(2)
 bus = smbus.SMBus(1)  # 1 indicates /dev/i2c-1
 
 # Device address (detected by i2cdetect)
-DEVICE_ADDRESS = 0x12
+DEVICE_ADDRESS = 0x13
 
 def write_i2c_block(address, data):
     bus.write_i2c_block_data(DEVICE_ADDRESS, address, data)
