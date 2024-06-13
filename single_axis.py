@@ -34,7 +34,7 @@ def read_i2c_block(address, length):
         print(f"Error reading I2C data: {e}")
         return None
 def read_sensor_data():
-    data = read_i2c_block(0x00, 2)  # Read 2 bytes from register 0x00
+    data = read_i2c_block(0x00, 3)  # Read 2 bytes from register 0x00
     print(data)
     if data is not None:
         integer_part = data[0]
