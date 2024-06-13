@@ -38,7 +38,8 @@ def read_sensor_data():
     print(f"raw: {data}")
     # Example usage
     # data = bytes([0x34, 0x12])
-    decoded_value = int(ads_int16_decode(data))
+    #decoded_value = int(ads_int16_decode(data))
+    decoded_value = int(data[2]*256+data[1])
     decoded_value = decoded_value/64
     print(f"decoded: {decoded_value}") 
     if data is not None:
