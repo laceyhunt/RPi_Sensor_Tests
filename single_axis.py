@@ -34,7 +34,7 @@ def read_i2c_block(address, length):
         print(f"Error reading I2C data: {e}")
         return None
 def read_sensor_data():
-    data = read_i2c_block(0x00, 4)  # Read 2 bytes from register 0x00
+    data = read_i2c_block(0x00, 3)  # Read 2 bytes from register 0x00
     print(data)
     if data is not None:
         integer_part = data[0]
@@ -119,6 +119,8 @@ try:
 
     while True:
         angle = read_sensor_data()
+        write_i2c_block(0x00, [1, 00])
+        time.sleep(0.1)
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
     #         # smoothed_angle = moving_average.add(angle)
