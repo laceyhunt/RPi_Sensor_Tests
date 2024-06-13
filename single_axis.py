@@ -79,7 +79,7 @@ def read_sensor_data():
 	ADS_333_HZ = 49,					// 333 samples per second, Interrupt Mode
 	ADS_500_HZ = 32,					// 500 samples per second, Interrupt Mode, max rate
 """
-write_i2c_block(0x01, [16384, 00, 00])
+write_i2c_block(0x01, [163, 00, 00])
 time.sleep(0.1)
 
 # write_i2c_block(0x09, [0, 0])
