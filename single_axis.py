@@ -35,7 +35,11 @@ def read_i2c_block(address, length):
         return None
 def read_sensor_data():
     data = read_i2c_block(0x00, 3)  # Read 2 bytes from register 0x00
-    print(data)
+    print(f"raw: {data}")
+    # Example usage
+    # data = bytes([0x34, 0x12])
+    decoded_value = ads_int16_decode(data)
+    print(f"decoded: {decoded_value}") 
     if data is not None:
         integer_part = data[0]
         fractional_part = data[1]
@@ -43,6 +47,20 @@ def read_sensor_data():
         return angle
     else:
         return None
+def ads_int16_decode(p_encoded_data):
+    """
+    Decode a 16-bit signed integer from a sequence of two bytes.
+
+    Args:
+        p_encoded_data (bytes): A bytes object containing at least two bytes.
+
+    Returns:
+        int: The decoded 16-bit signed integer.
+    """
+    if len(p_encoded_data) < 2:
+        raise ValueError("Input data must contain at least two bytes")
+
+    return (p_encoded_data[1]) | (p_encoded_data[2] << 8)
 
 # Sequence of writes to initialize the sensor
 # while GPIO.input(input_pin)!=GPIO.LOW:
