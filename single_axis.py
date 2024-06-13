@@ -119,8 +119,8 @@ try:
 
     while True:
         angle = read_sensor_data()
-        write_i2c_block(0x00, [1, 00])
-        time.sleep(0.1)
+        write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+        time.sleep(0.05)
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
     #         # smoothed_angle = moving_average.add(angle)
@@ -128,7 +128,6 @@ try:
     #     else:
     #         print("Failed to read sensor data.")
     #     # change to just read when interrupted
-        time.sleep(0.1)  # Adjust the sleep time as needed (e.g., for 10Hz sampling rate, use 0.1s)
     #     # inp=GPIO.input(input_pin)
         # while GPIO.input(input_pin)!=GPIO.LOW:
     #     # while inp!=0:
