@@ -22,7 +22,7 @@ time.sleep(2)
 bus = smbus.SMBus(1)  # 1 indicates /dev/i2c-1
 
 # Device address (detected by i2cdetect)
-DEVICE_ADDRESS = 0x13
+DEVICE_ADDRESS = 0x12
 
 def write_i2c_block(address, data):
     bus.write_i2c_block_data(DEVICE_ADDRESS, address, data)
@@ -34,7 +34,7 @@ def read_i2c_block(address, length):
         print(f"Error reading I2C data: {e}")
         return None
 def read_sensor_data():
-    data = read_i2c_block(0x00, 5)  # Read 2 bytes from register 0x00
+    data = read_i2c_block(0x00, 3)  # Read 2 bytes from register 0x00
     print(data)
     if data is not None:
         integer_part = data[0]
