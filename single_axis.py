@@ -88,7 +88,7 @@ time.sleep(0.1)
 # write_i2c_block(0x01, [0xA3, 00])
 # time.sleep(0.1)
 
-write_i2c_block(0x00, [00, 1])
+write_i2c_block(0x00, [1, 00])
 time.sleep(0.1)
 print("Done with i2c init")
 
