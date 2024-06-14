@@ -40,6 +40,11 @@ def read_sensor_data():
     # data = bytes([0x34, 0x12])
     #decoded_value = int(ads_int16_decode(data))
     decoded_value = int(data[2]*256+data[1])
+    # get as signed BEFORE DIVIDING
+
+    # output sude to sensor input to pi
+    # gpio to enable
+    # set enable to HI then LO for initializing ... set to HI anytime I2C is going
     decoded_value = decoded_value/64
     print(f"decoded: {decoded_value}") 
     if data is not None:
@@ -129,8 +134,10 @@ try:
     # moving_average = MovingAverage(filter_size)
 
     while True:
+        # HI
         angle = read_sensor_data()
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+        # LO
         time.sleep(0.05)
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
