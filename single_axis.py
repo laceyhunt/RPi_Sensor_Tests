@@ -5,8 +5,8 @@ import RPi.GPIO as GPIO
 
 print("starting...")
 # Initialize GPIO pins
-reset_pin=27
-input_pin=22
+reset_pin=27       
+input_pin=22   # aka DRDY, note this is not used in this ex b/c of delays
 i2c_enable_pin=23
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
 GPIO.setup(reset_pin, GPIO.OUT) # reset
@@ -51,10 +51,18 @@ def read_sensor_data():
         # get as signed BEFORE DIVIDING
         decoded_value = decoded_value/64
         print(f"decoded: {decoded_value}")
-        integer_part = data[0]
-        fractional_part = data[1]
-        angle = integer_part + fractional_part / 256.0  # Assuming fractional part is in 1/256 units
-        return angle
+
+        # Combine the bytes to get the raw 16-bit value
+        raw_value = (data[2] << 8) | data[1]
+        # Convert raw_value to signed 16-bit integer
+        if raw_value & 0x8000:  # Check if the sign bit is set
+            decoded_value = raw_value - 0x10000
+        else:
+            decoded_value = raw_value
+        # Scale the value
+        decoded_value = decoded_value / 64
+        print(f"new decoded: {decoded_value}")
+        return decoded_value
     else:
         return None
 def ads_int16_decode(p_encoded_data):
@@ -141,13 +149,11 @@ try:
     while True:
         # set i2c enable to HI
         GPIO.output(i2c_enable_pin,GPIO.HIGH)
-        time.sleep(0.05)
-
+        time.sleep(0.01)
         angle = read_sensor_data()
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
         # set i2c enable to LO
-        time.sleep(0.05)
-
+        time.sleep(0.01)
         GPIO.output(i2c_enable_pin,GPIO.LOW)
         time.sleep(0.05)
 
