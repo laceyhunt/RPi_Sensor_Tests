@@ -44,15 +44,13 @@ def read_i2c_block(address, length):
         return None
 def read_sensor_data():
     data = read_i2c_block(0x00, 3)  # Read 2 bytes from register 0x00
-    print(f"raw: {data}")
-    # Example usage
-    # data = bytes([0x34, 0x12])
-    #decoded_value = int(ads_int16_decode(data))
-    decoded_value = int(data[2]*256+data[1])
-    # get as signed BEFORE DIVIDING
-    decoded_value = decoded_value/64
-    print(f"decoded: {decoded_value}") 
+    print(f"raw: {data}") 
     if data is not None:
+        #decoded_value = int(ads_int16_decode(data))
+        decoded_value = int(data[2]*256+data[1])
+        # get as signed BEFORE DIVIDING
+        decoded_value = decoded_value/64
+        print(f"decoded: {decoded_value}")
         integer_part = data[0]
         fractional_part = data[1]
         angle = integer_part + fractional_part / 256.0  # Assuming fractional part is in 1/256 units
@@ -148,6 +146,11 @@ try:
         # set i2c enable to LO
         GPIO.output(i2c_enable_pin,GPIO.LOW)
         time.sleep(0.05)
+
+
+
+
+        
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
     #         # smoothed_angle = moving_average.add(angle)
