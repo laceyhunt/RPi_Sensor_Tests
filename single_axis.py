@@ -141,9 +141,13 @@ try:
     while True:
         # set i2c enable to HI
         GPIO.output(i2c_enable_pin,GPIO.HIGH)
+        time.sleep(0.05)
+
         angle = read_sensor_data()
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
         # set i2c enable to LO
+        time.sleep(0.05)
+
         GPIO.output(i2c_enable_pin,GPIO.LOW)
         time.sleep(0.05)
 
