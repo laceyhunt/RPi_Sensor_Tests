@@ -7,15 +7,24 @@ print("starting...")
 # Initialize GPIO pins
 reset_pin=27
 input_pin=22
+i2c_enable_pin=23
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
 GPIO.setup(reset_pin, GPIO.OUT) # reset
+GPIO.setup(i2c_enable_pin, GPIO.OUT) # i2c buffer enable pin
 GPIO.setup(input_pin, GPIO.IN) # input
 
 # set reset low, wait, high, wait
+# note reset pin does not go through i2c so no need to set buffer
 GPIO.output(reset_pin,GPIO.LOW)
 time.sleep(0.01)
 GPIO.output(reset_pin,GPIO.HIGH)
-print("done with GPIO init")
+time.sleep(2)
+# set i2c enable to HI then LO for initializing ... set to HI anytime I2C is going
+GPIO.output(i2c_enable_pin,GPIO.HIGH)
+time.sleep(0.01)
+GPIO.output(i2c_enable_pin,GPIO.LOW)
+time.sleep(2)
+print("done with GPIO and reset init")
 time.sleep(2)
 
 # Initialize I2C bus
@@ -41,10 +50,6 @@ def read_sensor_data():
     #decoded_value = int(ads_int16_decode(data))
     decoded_value = int(data[2]*256+data[1])
     # get as signed BEFORE DIVIDING
-
-    # output sude to sensor input to pi
-    # gpio to enable
-    # set enable to HI then LO for initializing ... set to HI anytime I2C is going
     decoded_value = decoded_value/64
     print(f"decoded: {decoded_value}") 
     if data is not None:
@@ -134,10 +139,12 @@ try:
     # moving_average = MovingAverage(filter_size)
 
     while True:
-        # HI
+        # set i2c enable to HI
+        GPIO.output(i2c_enable_pin,GPIO.HIGH)
         angle = read_sensor_data()
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
-        # LO
+        # set i2c enable to LO
+        GPIO.output(i2c_enable_pin,GPIO.LOW)
         time.sleep(0.05)
     #     if angle is not None:
     #         pass # because read_sensor_data handles printing raw data
