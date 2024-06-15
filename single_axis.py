@@ -46,30 +46,24 @@ def read_sensor_data():
     data = read_i2c_block(0x00, 3)  # Read 2 bytes from register 0x00
     print(f"raw: {data}") 
     if data is not None:
-        #decoded_value = int(ads_int16_decode(data))
-        decoded_value = int(data[2]*256+data[1])
-        # get as signed BEFORE DIVIDING
-        decoded_value = decoded_value/64
-        print(f"decoded: {decoded_value}")
-
-        # Combine the bytes to get the raw 16-bit value
-        raw_value = (data[2] << 8) | data[1]
-        # Convert raw_value to signed 16-bit integer
-        if raw_value & 0x8000:  # Check if the sign bit is set
-            decoded_value = raw_value - 0x10000
-        else:
-            decoded_value = raw_value
-        # Scale the value
-        decoded_value = decoded_value / 64
+        decoded_value=ads_int16_decode(data)
         print(f"new decoded: {decoded_value}")
         return decoded_value
     else:
         return None
-def ads_int16_decode(p_encoded_data):
-    if len(p_encoded_data) < 2:
-        raise ValueError("Input data must contain at least two bytes")
-
-    return (p_encoded_data[1]) | (p_encoded_data[2] << 8)
+def ads_int16_decode(data):
+    if len(data) < 3:
+        raise ValueError("Input data must contain at least three bytes")
+    # Combine the bytes to get the raw 16-bit value
+    raw_value = (data[2] << 8) | data[1] # equal to data[2]*256+data[1]
+    # Convert raw_value to signed 16-bit integer
+    if raw_value & 0x8000:  # Check if the sign bit is set
+        decoded_value = raw_value - 0x10000
+    else:
+        decoded_value = raw_value
+    # Scale the value
+    decoded_value = decoded_value / 64
+    return decoded_value
 
 # Sequence of writes to initialize the sensor
 GPIO.output(i2c_enable_pin,GPIO.HIGH)
