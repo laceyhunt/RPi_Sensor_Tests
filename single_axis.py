@@ -66,6 +66,7 @@ def ads_int16_decode(p_encoded_data):
     return (p_encoded_data[1]) | (p_encoded_data[2] << 8)
 
 # Sequence of writes to initialize the sensor
+GPIO.output(i2c_enable_pin,GPIO.HIGH)
 # while GPIO.input(input_pin)!=GPIO.LOW:
 #     pass
 # write_i2c_block(0x0A, [0, 0])
@@ -112,6 +113,7 @@ time.sleep(0.1)
 write_i2c_block(0x00, [1, 00])
 time.sleep(0.1)
 print("Done with i2c init")
+GPIO.output(i2c_enable_pin,GPIO.LOW)
 
 # Now the sensor should be running
 
