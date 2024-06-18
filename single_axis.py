@@ -13,6 +13,9 @@ GPIO.setup(reset_pin, GPIO.OUT) # reset
 GPIO.setup(i2c_enable_pin, GPIO.OUT) # i2c buffer enable pin
 GPIO.setup(input_pin, GPIO.IN) # input
 
+GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 # set reset low, wait, high, wait
 # note reset pin does not go through i2c so no need to set buffer
 GPIO.output(reset_pin,GPIO.LOW)
