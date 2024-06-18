@@ -77,7 +77,7 @@ GPIO.output(i2c_enable_pin,GPIO.HIGH)
 # while GPIO.input(input_pin)!=GPIO.LOW:
 #     pass
 
-write_i2c_block(0x05, [0, 1])  # polled mode
+write_i2c_block(0x05, [1, 1])  # polled mode
 time.sleep(0.1)
 
 # data=read_i2c_block(0x02, 2)
