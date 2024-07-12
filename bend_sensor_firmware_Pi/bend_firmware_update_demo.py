@@ -32,7 +32,7 @@ def ads_uint16_decode(bytes):
 
 
 # GPIO pins
-ADS_RESET_PIN = 72
+ADS_RESET_PIN = 27
 ADS_INTERRUPT_PIN = 22
 
 # I2C address
