@@ -4,9 +4,10 @@ from collections import deque
 import RPi.GPIO as GPIO
 
 print("Starting...")
-
+num_read =3 #3 for single, 5 for two
 # Function to get user input and set DEVICE_ADDRESS
 def get_device_address():
+    global num_read
     while True:
         user_input = input("Enter 1 or 2 to select device address: ")
         if user_input == '1':
@@ -27,7 +28,6 @@ GPIO.setmode(GPIO.BCM) # GPIO numbering
 GPIO.setup(reset_pin, GPIO.OUT) # reset
 GPIO.setup(i2c_enable_pin, GPIO.OUT) # i2c buffer enable pin
 GPIO.setup(input_pin, GPIO.IN) # input
-num_read =3 #3 for single, 5 for two
 
 # GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # GPIO.setup(3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -62,6 +62,7 @@ def read_i2c_block(address, length):
         return None
 
 def read_sensor_data():
+    global num_read
     data = read_i2c_block(0x00, num_read)  # Read 2 bytes from register 0x00
     print(f"Raw: {data}") 
     if data is not None:
