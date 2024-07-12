@@ -64,14 +64,16 @@ def read_i2c_block(address, length):
 def read_sensor_data():
     global num_read
     data = read_i2c_block(0x00, num_read)  # Read 2 bytes from register 0x00
-    print(f"Raw: {data}") 
+    # print(f"Raw: {data}") 
     if data is not None:
-        decoded_value = ads_int16_decode_single(data)
-        print(f"Decoded: {decoded_value}")
+        decoded_value1 = ads_int16_decode_single(data)
+        if(DEVICE_ADDRESS==0x12):
+            print(f"Raw: {data}     Decoded: {decoded_value1}")
         if(DEVICE_ADDRESS==0x13):
-            decoded_value = ads_int16_decode_two(data)
-            print(f"Decoded: {decoded_value}")
-        return decoded_value
+            decoded_value2 = ads_int16_decode_two(data)
+            # print(f"Decoded: {decoded_value2}")
+            print(f"Raw: {data}     Decoded: {decoded_value1}, {decoded_value2}")
+        return decoded_value2
     else:
         return None
 
