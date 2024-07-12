@@ -73,7 +73,7 @@ def read_sensor_data():
             decoded_value2 = ads_int16_decode_two(data)
             # print(f"Decoded: {decoded_value2}")
             print(f"Raw: {data}     Decoded: {decoded_value1}, {decoded_value2}")
-        return decoded_value2
+        return decoded_value1
     else:
         return None
 
