@@ -5,6 +5,20 @@ import RPi.GPIO as GPIO
 
 print("Starting...")
 
+# Function to get user input and set DEVICE_ADDRESS
+def get_device_address():
+    while True:
+        user_input = input("Enter 1 or 2 to select device address: ")
+        if user_input == '1':
+            num_read=3
+            return 0x12
+        elif user_input == '2':
+            num_read=5
+            return 0x13
+        else:
+            print("Invalid input. Please enter either 1 or 2.")
+
+DEVICE_ADDRESS = get_device_address()
 # Initialize GPIO pins
 reset_pin = 27       
 input_pin = 22   # aka DRDY, note this is not used in this ex b/c of delays
@@ -35,20 +49,6 @@ time.sleep(2)
 # Initialize I2C bus
 bus = smbus.SMBus(1)  # 1 indicates /dev/i2c-1
 
-# Function to get user input and set DEVICE_ADDRESS
-def get_device_address():
-    while True:
-        user_input = input("Enter 1 or 2 to select device address: ")
-        if user_input == '1':
-            num_read=3
-            return 0x12
-        elif user_input == '2':
-            num_read=5
-            return 0x13
-        else:
-            print("Invalid input. Please enter either 1 or 2.")
-
-DEVICE_ADDRESS = get_device_address()
 
 def write_i2c_block(address, data):
     bus.write_i2c_block_data(DEVICE_ADDRESS, address, data)
