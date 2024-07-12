@@ -19,6 +19,18 @@ ADS_ERR_IO = -1
 ADS_ERR_DEV_ID = -1
 ADS_DEFAULT_ADDR = 0x12
 
+ADS_GET_FW_VER = 0x01  # Replace with the actual command for getting firmware version
+ADS_FW_VER = 0xAB  # Replace with the actual firmware version constant
+
+# Define firmware versions (these should be defined according to your actual firmware versions)
+# ADS_FW_REV = 0x0100  # Example version for ADS_ONE_AXIS_V1
+# ADS_FW_V2_REV = 0x0200  # Example version for ADS_ONE_AXIS_V2
+
+# Placeholder for ads_uint16_decode function (to decode 2 bytes into a uint16_t)
+def ads_uint16_decode(bytes):
+    return bytes[0] | (bytes[1] << 8)
+
+
 # GPIO pins
 ADS_RESET_PIN = 72
 ADS_INTERRUPT_PIN = 22
@@ -51,23 +63,81 @@ class ADSInit:
 
 # Initialize the sensor
 def ads_init(init):
-    GPIO.output(init.reset_pin, GPIO.HIGH)
-    time.sleep(0.1)
-    GPIO.output(init.reset_pin, GPIO.LOW)
-    time.sleep(0.1)
-    GPIO.output(init.reset_pin, GPIO.HIGH)
+    # GPIO.output(init.reset_pin, GPIO.HIGH)
+    # time.sleep(0.1)
+    # GPIO.output(init.reset_pin, GPIO.LOW)
+    # time.sleep(0.1)
+    # GPIO.output(init.reset_pin, GPIO.HIGH)
+    # note reset pin does not go through i2c so no need to set buffer
+    GPIO.output(init.reset_pin,GPIO.LOW)
+    time.sleep(0.01)
+    GPIO.output(init.reset_pin,GPIO.HIGH)
+    time.sleep(1)
+    print("done with GPIO and reset init")
+    time.sleep(1)
     # Add additional initialization code here
     return 0  # Return ADS_OK
 
 # Get device type
 def ads_get_dev_type():
-    # Replace with actual code to get the device type
-    return 0, 1  # Return ADS_OK and dummy device type
+    buffer = [ADS_GET_DEV_ID] + [0] * (ADS_TRANSFER_SIZE - 1)
+    
+    # Disable interrupt to prevent callback from reading out device id
+    ads_hal_pin_int_enable(False)
+    
+    # Write buffer to device
+    ret = ads_hal_write_buffer(buffer)
+    if ret != ADS_OK:
+        return ADS_ERR_DEV_ID, ADS_DEV_UNKNOWN
+    
+    ads_hal_delay(2)
+    
+    # Read buffer from device
+    ret = ads_hal_read_buffer(buffer, ADS_TRANSFER_SIZE)
+    if ret != ADS_OK:
+        return ADS_ERR_DEV_ID, ADS_DEV_UNKNOWN
+    
+    # Enable interrupt
+    ads_hal_pin_int_enable(True)
+    
+    if buffer[0] == ADS_DEV_ID:
+        # if buffer[1] in (ADS_DEV_ONE_AXIS_V1, ADS_DEV_ONE_AXIS_V2, ADS_DEV_TWO_AXIS_V1):
+        return ADS_OK, buffer[1]
+    
+    return ADS_ERR_DEV_ID, ADS_DEV_UNKNOWN
+
 
 # Check if firmware update is needed
-def ads_dfu_check(dev_type):
-    # Replace with actual firmware check logic
-    return True
+def ads_dfu_check(ads_dev_type):
+    buffer = [ADS_GET_FW_VER, 0, 0]
+    
+    ads_hal_pin_int_enable(False)
+    
+    ret = ads_hal_write_buffer(buffer)
+    if ret != ADS_OK:
+        ads_hal_pin_int_enable(True)
+        return False
+    
+    ads_hal_delay(2)
+    
+    ret = ads_hal_read_buffer(buffer, ADS_TRANSFER_SIZE)
+    ads_hal_pin_int_enable(True)
+    
+    if ret != ADS_OK:
+        return False
+    
+    if buffer[0] == ADS_FW_VER:
+        fw_ver = ads_uint16_decode(buffer[1:3])
+    else:
+        return False
+    
+    if ads_dev_type == ADS_DEV_ONE_AXIS_V1:
+        return fw_ver < ADS_FW_REV
+    elif ads_dev_type == ADS_DEV_ONE_AXIS_V2:
+        return fw_ver < ADS_FW_V2_REV
+    
+    return False
+
 
 # Reset the device for firmware update
 def ads_dfu_reset():

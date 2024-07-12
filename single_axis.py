@@ -7,7 +7,7 @@ print("starting...")
 # Initialize GPIO pins
 reset_pin=27       
 input_pin=22   # aka DRDY, note this is not used in this ex b/c of delays
-i2c_enable_pin=23
+i2c_enable_pin=23 # used for the buffer chip
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
 GPIO.setup(reset_pin, GPIO.OUT) # reset
 GPIO.setup(i2c_enable_pin, GPIO.OUT) # i2c buffer enable pin
