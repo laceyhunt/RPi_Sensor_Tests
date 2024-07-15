@@ -9,11 +9,10 @@ BEND_ADDRESS = 0x12
 I2C_BUS = 1
 CHUNK_SIZE = 31  # Effective chunk size after accounting for the control byte
 reset_pin=27       
-input_pin=22   # aka DRDY, note this is not used in this ex b/c of delays
-
+bus = SMBus(I2C_BUS)
 # Function to read CSV and write hex values to I2C
 def read_hex_csv_and_write_i2c(file_path):
-    bus = SMBus(I2C_BUS)
+    # bus = SMBus(I2C_BUS)
     with open(file_path, mode='r') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
@@ -30,7 +29,7 @@ def read_hex_csv_and_write_i2c(file_path):
                         message = i2c_msg.write(I2C_ADDRESS, [register_address] + chunk)
                         bus.i2c_rdwr(message)
 
-    bus.close()
+    # bus.close()
 
 
 # init oled
@@ -38,15 +37,8 @@ file_path = 'oled_1.csv'
 read_hex_csv_and_write_i2c(file_path)
 
 # init sensor
-reset_pin=27       
-input_pin=22   # aka DRDY, note this is not used in this ex b/c of delays
-i2c_enable_pin=23 # used for the buffer chip
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
 GPIO.setup(reset_pin, GPIO.OUT) # reset
-GPIO.setup(i2c_enable_pin, GPIO.OUT) # i2c buffer enable pin
-GPIO.setup(input_pin, GPIO.IN) # input
-# set reset low, wait, high, wait
-# note reset pin does not go through i2c so no need to set buffer
 GPIO.output(reset_pin,GPIO.LOW)
 time.sleep(0.01)
 GPIO.output(reset_pin,GPIO.HIGH)
@@ -104,6 +96,7 @@ for i in range(10):
     write_i2c_block(0x00, [1, 00]) # RUN COMMAND
     time.sleep(0.05)
 
+bus.close()
 
 print("read 10 vals")
 quit()
