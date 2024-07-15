@@ -55,6 +55,7 @@ def main():
             data_str = row['Data'].strip().replace(" ", "")  # Remove spaces
             data = int(data_str, 16)  # Convert hex string to integer
             chunk2.append((address, data))
+        time.sleep(.1)
 
     # Write the first chunk
     print("Writing first chunk...")
