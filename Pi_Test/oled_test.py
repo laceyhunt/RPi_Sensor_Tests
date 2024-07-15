@@ -42,17 +42,17 @@ def main():
     df.columns = ['Addr', 'Data', 'Ack']
 
     for _, row in df.iterrows():
-        instruction = row['instruction'].strip()
+        instruction = row['Addr'].strip()
         if instruction.startswith("3CW") and not found_12w:
             address = int(instruction[0:2], 16)
-            data_str = row['data'].strip().replace(" ", "")  # Remove spaces
+            data_str = row['Data'].strip().replace(" ", "")  # Remove spaces
             data = int(data_str, 16)  # Convert hex string to integer
             chunk1.append((address, data))
         elif instruction.startswith("12W"):
             found_12w = True
         elif instruction.startswith("3CW") and found_12w:
             address = int(instruction[0:2], 16)
-            data_str = row['data'].strip().replace(" ", "")  # Remove spaces
+            data_str = row['Data'].strip().replace(" ", "")  # Remove spaces
             data = int(data_str, 16)  # Convert hex string to integer
             chunk2.append((address, data))
 
