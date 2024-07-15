@@ -45,7 +45,7 @@ def main():
         instruction = row['Addr'].strip()
         if instruction.startswith("3CW") and not found_12w:
             # address = int(instruction[0:2], 16)
-            address=0x78
+            address=0x3c
             data_str = row['Data'].strip().replace(" ", "")  # Remove spaces
             data = int(data_str, 16)  # Convert hex string to integer
             chunk1.append((address, data))
@@ -53,7 +53,7 @@ def main():
             found_12w = True
         elif instruction.startswith("3CW") and found_12w:
             # address = int(instruction[0:2], 16)
-            address=0x78
+            address=0x3c
             data_str = row['Data'].strip().replace(" ", "")  # Remove spaces
             data = int(data_str, 16)  # Convert hex string to integer
             chunk2.append((address, data))
