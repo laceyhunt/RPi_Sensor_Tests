@@ -19,8 +19,8 @@ def read_hex_csv_and_write_i2c(file_path):
                     data_to_write.append(int(hex_value, 16))
                 # Write the data to I2C device
                 if data_to_write:
-                    # bus.write_i2c_block_data(I2C_ADDRESS, 0x00, data_to_write)
-                    write_i2c_data(I2C_ADDRESS,data_to_write)
+                    bus.write_i2c_block_data(I2C_ADDRESS, data_to_write[0], data_to_write[1:])
+                    #write_i2c_data(I2C_ADDRESS,data_to_write)
 
     bus.close()
 
