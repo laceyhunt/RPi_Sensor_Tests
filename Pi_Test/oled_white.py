@@ -43,8 +43,10 @@ def clear_display():
 
     for i in range(0, len(buffer), chunk_size):
         chunk = buffer[i:i + chunk_size]
-        command = [0x40] + chunk  # 0x40 is the command to write data to RAM
-        i2c.write_i2c_block_data(SSD1306_I2C_ADDR, 0x00, command)
+        if chunk:  # Ensure chunk is not empty
+            command = [0x40] + chunk  # 0x40 is the command to write data to RAM
+            i2c.write_i2c_block_data(SSD1306_I2C_ADDR, 0x00, command)
+
 
 
 # Initialize the display
