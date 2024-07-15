@@ -39,7 +39,7 @@ def main():
     chunk2 = []
     found_12w = False
     # Ensure column names are correctly specified
-    df.columns = ['instruction', 'data', 'extra']
+    df.columns = ['Addr', 'Data', 'Ack']
 
     for _, row in df.iterrows():
         instruction = row['instruction'].strip()
