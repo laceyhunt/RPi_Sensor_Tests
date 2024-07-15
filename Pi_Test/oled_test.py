@@ -62,15 +62,15 @@ def main():
     for address, data in chunk1:
         write_i2c_data(address, data)
 
-    # Wait for a specified amount of time
-    wait_time = 5  # seconds
-    print(f"Waiting for {wait_time} seconds...")
-    time.sleep(wait_time)
+    # # Wait for a specified amount of time
+    # wait_time = 5  # seconds
+    # print(f"Waiting for {wait_time} seconds...")
+    # time.sleep(wait_time)
 
-    # Write the second chunk
-    print("Writing second chunk...")
-    for address, data in chunk2:
-        write_i2c_data(address, data)
+    # # Write the second chunk
+    # print("Writing second chunk...")
+    # for address, data in chunk2:
+    #     write_i2c_data(address, data)
 
 if __name__ == "__main__":
     try:
