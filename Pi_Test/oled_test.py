@@ -38,17 +38,22 @@ def main():
     chunk1 = []
     chunk2 = []
     found_12w = False
+    # Ensure column names are correctly specified
+    df.columns = ['instruction', 'data', 'extra']
 
     for _, row in df.iterrows():
-        if row[0].startswith("3CW") and not found_12w:
-            address = int(row[0][:2], 16)
-            data = int(row[1], 16)  # Convert hex string to integer
+        instruction = row['instruction'].strip()
+        if instruction.startswith("3CW") and not found_12w:
+            address = int(instruction[0:2], 16)
+            data_str = row['data'].strip().replace(" ", "")  # Remove spaces
+            data = int(data_str, 16)  # Convert hex string to integer
             chunk1.append((address, data))
-        elif row[0].startswith("12W"):
+        elif instruction.startswith("12W"):
             found_12w = True
-        elif row[0].startswith("3CW") and found_12w:
-            address = int(row[0][:2], 16)
-            data = int(row[1], 16)  # Convert hex string to integer
+        elif instruction.startswith("3CW") and found_12w:
+            address = int(instruction[0:2], 16)
+            data_str = row['data'].strip().replace(" ", "")  # Remove spaces
+            data = int(data_str, 16)  # Convert hex string to integer
             chunk2.append((address, data))
 
     # Write the first chunk
