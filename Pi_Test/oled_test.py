@@ -39,13 +39,17 @@ def main():
     chunk2 = []
     found_12w = False
 
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
         if row[0].startswith("3CW") and not found_12w:
-            chunk1.append((int(row[0][0:2], 16), int(row[1], 16)))
+            address = int(row[0][:2], 16)
+            data = int(row[1], 16)  # Convert hex string to integer
+            chunk1.append((address, data))
         elif row[0].startswith("12W"):
             found_12w = True
         elif row[0].startswith("3CW") and found_12w:
-            chunk2.append((int(row[0][0:2], 16), int(row[1], 16)))
+            address = int(row[0][:2], 16)
+            data = int(row[1], 16)  # Convert hex string to integer
+            chunk2.append((address, data))
 
     # Write the first chunk
     print("Writing first chunk...")
