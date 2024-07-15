@@ -90,13 +90,18 @@ print("Done with i2c init")
 # file_path = 'oled_2.csv'
 # read_hex_csv_and_write_i2c(file_path)
 
-for i in range(10):
-    time.sleep(0.01)
-    angle = read_sensor_data()
-    write_i2c_block(0x00, [1, 00]) # RUN COMMAND
-    time.sleep(0.05)
+# for i in range(10):
+try:
+    while(True):
+        time.sleep(0.01)
+        angle = read_sensor_data()
+        write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+        time.sleep(0.05)
 
-bus.close()
+except KeyboardInterrupt:
+    print("Program stopped, cleaning up...")
+    GPIO.cleanup()
+    bus.close()
 
-print("read 10 vals")
-quit()
+    print("read 10 vals")
+    quit()
