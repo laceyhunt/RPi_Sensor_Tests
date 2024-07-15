@@ -36,5 +36,5 @@ def write_i2c_data(address, data):
 
 
 # Example usage
-file_path = 'path_to_your_csv_file.csv'
+file_path = 'oled_1.csv'
 read_hex_csv_and_write_i2c(file_path)
