@@ -41,6 +41,21 @@ def main():
     # Ensure column names are correctly specified
     df.columns = ['Addr', 'Data', 'Ack']
 
+
+
+
+# row_list=csvread(row)
+# addr_trash=row_list[0]
+# data_str_list=row_list[1].split(' ')
+# data_list=[]
+# for data in data_str_list:
+#     data_list.append(int(data,16))
+
+
+
+
+
+
     for _, row in df.iterrows():
         instruction = row['Addr'].strip()
         if instruction.startswith("3CW") and not found_12w:
