@@ -1,9 +1,12 @@
-import busio
+import smbus
 import Adafruit_SSD1306
 from PIL import Image, ImageDraw, ImageFont
 
-# I2C setup (example for Raspberry Pi Pico)
-i2c = busio.I2C(scl=Pin(1), sda=Pin(0))  # Replace Pin numbers with your actual GPIO pins
+# Define I2C bus number (0 or 1, depending on your Raspberry Pi model)
+i2c_bus = 1  # Replace with 0 if using Raspberry Pi model prior to 4
+
+# Initialize I2C bus
+i2c = smbus.SMBus(i2c_bus)
 
 # SSD1306 display setup
 WIDTH = 128
