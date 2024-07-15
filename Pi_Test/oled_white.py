@@ -38,9 +38,14 @@ def ssd1306_init():
 
 # Clear the SSD1306 display buffer
 def clear_display():
-    buffer = [0x00] * (WIDTH * HEIGHT // 8)
-    command = [0x40] + buffer  # 0x40 is the command to write data to RAM
-    i2c.write_i2c_block_data(SSD1306_I2C_ADDR, 0x00, command)
+    buffer = [0x00] * (WIDTH * HEIGHT // 8)  # Calculate total buffer size
+    chunk_size = 32  # Maximum chunk size for write_i2c_block_data
+
+    for i in range(0, len(buffer), chunk_size):
+        chunk = buffer[i:i + chunk_size]
+        command = [0x40] + chunk  # 0x40 is the command to write data to RAM
+        i2c.write_i2c_block_data(SSD1306_I2C_ADDR, 0x00, command)
+
 
 # Initialize the display
 ssd1306_init()
