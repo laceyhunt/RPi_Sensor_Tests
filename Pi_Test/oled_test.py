@@ -32,7 +32,7 @@ def write_i2c_data(address, data):
 def main():
     # Load the CSV file
     csv_file = "oled_init.csv"
-    df = pd.read_csv(csv_file)
+    df = pd.read_csv(csv_file, usecols=['Addr', 'Data', 'Ack'])
 
     # Split the DataFrame into two chunks based on '12W'
     chunk1 = []
