@@ -1,5 +1,6 @@
 import csv
 from smbus2 import SMBus, i2c_msg
+import time
 
 # I2C address and bus
 I2C_ADDRESS = 0x3C
@@ -30,4 +31,7 @@ def read_hex_csv_and_write_i2c(file_path):
 
 # Example usage
 file_path = 'oled_1.csv'
+read_hex_csv_and_write_i2c(file_path)
+time.sleep(5)
+file_path = 'oled_2.csv'
 read_hex_csv_and_write_i2c(file_path)
