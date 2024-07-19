@@ -74,7 +74,7 @@ def ads_int16_decode(data):
 
 def get_device_address():
     global BEND_ADDRESS
-    sensor_type=read_i2c_block(0x2,3) # read device id
+    sensor_type=read_i2c_block(0xA,3) # read device id
     print(f"{sensor_type}-axis sensor...")
     if(sensor_type==0x1):
         BEND_ADDRESS=0x12
