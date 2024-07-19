@@ -29,12 +29,6 @@ def read_hex_csv_and_write_i2c(file_path):
                         message = i2c_msg.write(I2C_ADDRESS, [register_address] + chunk)
                         bus.i2c_rdwr(message)
 
-    # bus.close()
-
-
-# init oled
-file_path = 'oled_1.csv'
-read_hex_csv_and_write_i2c(file_path)
 
 # init sensor
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
@@ -77,14 +71,15 @@ def ads_int16_decode(data):
     decoded_value = decoded_value / 64
     return decoded_value
 
-# Sequence of writes to initialize the sensor
-write_i2c_block(0x05, [1, 1])  # polled mode
-time.sleep(0.1)
-write_i2c_block(0x01, [163, 00])
-time.sleep(0.1)
-write_i2c_block(0x00, [1, 00])
-time.sleep(0.1)
-print("Done with i2c init")
+
+def get_device_address():
+    global BEND_ADDRESS
+    sensor_type=read_i2c_block(0x2,3) # read device id
+    print(f"{sensor_type}-axis sensor...")
+    if(sensor_type==0x1):
+        BEND_ADDRESS=0x12
+    elif(sensor_type==0x2):
+        BEND_ADDRESS==0x13
 
 # time.sleep(5)
 # file_path = 'oled_2.csv'
@@ -92,16 +87,43 @@ print("Done with i2c init")
 
 # for i in range(10):
 try:
-    while(True):
+    get_device_address()
+    # init oled
+    file_path = 'oled_1.csv'
+    read_hex_csv_and_write_i2c(file_path)
+    print("Done with oled init")
+    # Sequence of writes to initialize the sensor
+    write_i2c_block(0x05, [1, 1])  # polled mode
+    time.sleep(0.1)
+    write_i2c_block(0x01, [163, 00])
+    time.sleep(0.1)
+    write_i2c_block(0x00, [1, 00])
+    time.sleep(0.1)
+    print("Done with sensor init")
+    print("Now, reading from sensor...")
+    # while(True):
+    for i in range (1,10):
         time.sleep(0.01)
         angle = read_sensor_data()
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
         time.sleep(0.05)
+    
+    print("Running oled...")
+    file_path = 'oled_2.csv'
+    read_hex_csv_and_write_i2c(file_path)
+    print("Done with second oled")
 
 except KeyboardInterrupt:
     print("Program stopped, cleaning up...")
     GPIO.cleanup()
     bus.close()
 
-    print("read 10 vals")
+    print("read some vals")
     quit()
+
+
+    # auto detect sensor type
+    # init oled
+    # take samples
+    # do oled sequence
+    # take more 
