@@ -142,6 +142,9 @@ try:
     #         write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
     #     time.sleep(0.05)
     print("Read 20 samples.")
+
+    time.sleep(5)
+    
     print("Running oled...")
     file_path = 'oled_2.csv'
     read_hex_csv_and_write_i2c(file_path)
