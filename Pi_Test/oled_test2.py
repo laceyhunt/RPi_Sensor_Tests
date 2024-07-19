@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 
 # I2C address and bus
 I2C_ADDRESS = 0x3C
-BEND_ADDRESS = 0x12
+BEND_ADDRESS = 0x13
 I2C_BUS = 1
 CHUNK_SIZE = 31  # Effective chunk size after accounting for the control byte
 reset_pin=27       
