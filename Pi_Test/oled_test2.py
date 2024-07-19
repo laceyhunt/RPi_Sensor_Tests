@@ -81,9 +81,11 @@ def get_device_address():
     if(sensor_type[0]==0x1):
         BEND_ADDRESS=0x12
         NUM_BYTES=3
+        print("SINGLE!!")
     elif(sensor_type[0]==0x2):
         BEND_ADDRESS==0x13
         NUM_BYTES=5
+        print("DOUBLE!!")
 
 # time.sleep(5)
 # file_path = 'oled_2.csv'
