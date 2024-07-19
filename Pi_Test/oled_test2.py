@@ -116,35 +116,35 @@ try:
     read_hex_csv_and_write_i2c(file_path)
     print("Done with oled init")
     # Sequence of writes to initialize the sensor
-    # if(BEND_ADDRESS==0x12):
-    #     write_i2c_block(0x05, [1, 1])  # polled mode
-    #     time.sleep(0.1)
-    #     write_i2c_block(0x01, [163, 00])
-    #     time.sleep(0.1)
-    #     write_i2c_block(0x00, [1, 00])
-    #     time.sleep(0.1)
-    # elif(BEND_ADDRESS==0x13):
-    #     write_i2c_block(0x05, [1, 1, 0, 0])  # polled mode
-    #     time.sleep(0.1)
-    #     write_i2c_block(0x01, [163, 00, 00, 00])
-    #     time.sleep(0.1)
-    #     write_i2c_block(0x00, [1, 00, 00, 00])
-    #     time.sleep(0.1)
+    if(BEND_ADDRESS==0x12):
+        write_i2c_block(0x05, [1, 1])  # polled mode
+        time.sleep(0.1)
+        write_i2c_block(0x01, [163, 00])
+        time.sleep(0.1)
+        write_i2c_block(0x00, [1, 00])
+        time.sleep(0.1)
+    elif(BEND_ADDRESS==0x13):
+        write_i2c_block(0x05, [1, 1, 0, 0])  # polled mode
+        time.sleep(0.1)
+        write_i2c_block(0x01, [163, 00, 00, 00])
+        time.sleep(0.1)
+        write_i2c_block(0x00, [1, 00, 00, 00])
+        time.sleep(0.1)
     print("Done with sensor init")
     print("Now, reading from sensor...")
     # while(True):
-    # for i in range (1,20):
-    #     time.sleep(0.01)
-    #     angle = read_sensor_data()
-    #     if(BEND_ADDRESS==0x12):
-    #         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
-    #     elif(BEND_ADDRESS==0x13):
-    #         write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
-    #     time.sleep(0.05)
+    for i in range (1,20):
+        time.sleep(0.01)
+        angle = read_sensor_data()
+        if(BEND_ADDRESS==0x12):
+            write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+        elif(BEND_ADDRESS==0x13):
+            write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
+        time.sleep(0.05)
     print("Read 20 samples.")
 
     time.sleep(5)
-    
+
     print("Running oled...")
     file_path = 'oled_2.csv'
     read_hex_csv_and_write_i2c(file_path)
