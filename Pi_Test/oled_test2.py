@@ -51,14 +51,19 @@ def read_i2c_block(address, length):
         return None
 def read_sensor_data():
     data = read_i2c_block(0x00, NUM_BYTES)  # Read 3 bytes from register 0x00, 5 instead of 3
-    print(f"raw: {data}") 
+    # print(f"raw: {data}") 
     if data is not None:
-        decoded_value=ads_int16_decode(data)
-        print(f"new decoded: {decoded_value}")
-        return decoded_value
+        decoded_value1 = ads_int16_decode_single(data)
+        if(BEND_ADDRESS==0x12):
+            print(f"Decoded: {decoded_value1}      Raw: {data}")
+        if(BEND_ADDRESS==0x13):
+            decoded_value2 = ads_int16_decode_two(data)
+            # print(f"Decoded: {decoded_value2}")
+            print(f"Decoded: {decoded_value1}, {decoded_value2}      Raw: {data}")
+        return decoded_value1
     else:
         return None
-def ads_int16_decode(data):
+def ads_int16_decode_single(data):
     if len(data) < 3:
         raise ValueError("Input data must contain at least three bytes")
     # Combine the bytes to get the raw 16-bit value
@@ -71,6 +76,19 @@ def ads_int16_decode(data):
     # Scale the value
     decoded_value = decoded_value / 64
     return decoded_value
+def ads_int16_decode_two(data):
+    if len(data) < 3:
+        raise ValueError("Input data must contain at least three bytes")
+    # Combine the bytes to get the raw 16-bit value
+    raw_value2 = (data[4] << 8) | data[3] # equal to data[2]*256+data[1]
+    # Convert raw_value to signed 16-bit integer
+    if raw_value2 & 0x8000:  # Check if the sign bit is set
+        decoded_value2 = raw_value2 - 0x10000
+    else:
+        decoded_value2 = raw_value2
+    # Scale the value
+    decoded_value2 = decoded_value2 / 64
+    return decoded_value2
 
 
 def get_device_address():
