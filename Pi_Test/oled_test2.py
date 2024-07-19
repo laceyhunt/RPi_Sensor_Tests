@@ -89,9 +89,9 @@ def get_device_address():
 try:
     get_device_address()
     # init oled
-    file_path = 'oled_1.csv'
-    read_hex_csv_and_write_i2c(file_path)
-    print("Done with oled init")
+    # file_path = 'oled_1.csv'
+    # read_hex_csv_and_write_i2c(file_path)
+    # print("Done with oled init")
     # Sequence of writes to initialize the sensor
     write_i2c_block(0x05, [1, 1])  # polled mode
     time.sleep(0.1)
@@ -108,10 +108,10 @@ try:
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
         time.sleep(0.05)
     
-    print("Running oled...")
-    file_path = 'oled_2.csv'
-    read_hex_csv_and_write_i2c(file_path)
-    print("Done with second oled")
+    # print("Running oled...")
+    # file_path = 'oled_2.csv'
+    # read_hex_csv_and_write_i2c(file_path)
+    # print("Done with second oled")
 
 except KeyboardInterrupt:
     print("Program stopped, cleaning up...")
