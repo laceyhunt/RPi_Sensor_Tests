@@ -111,7 +111,7 @@ def get_device_address():
 
 # for i in range(10):
 try:
-    get_device_address()
+    # get_device_address()
     # init oled
     file_path = 'oled_1.csv'
     read_hex_csv_and_write_i2c(file_path)
