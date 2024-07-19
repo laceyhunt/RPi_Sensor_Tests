@@ -8,6 +8,7 @@ I2C_ADDRESS = 0x3C
 BEND_ADDRESS = 0x13
 I2C_BUS = 1
 CHUNK_SIZE = 31  # Effective chunk size after accounting for the control byte
+NUM_BYTES=5
 reset_pin=27       
 bus = SMBus(I2C_BUS)
 # Function to read CSV and write hex values to I2C
@@ -49,7 +50,7 @@ def read_i2c_block(address, length):
         print(f"Error reading I2C data: {e}")
         return None
 def read_sensor_data():
-    data = read_i2c_block(0x00, 3)  # Read 3 bytes from register 0x00, 5 instead of 3
+    data = read_i2c_block(0x00, NUM_BYTES)  # Read 3 bytes from register 0x00, 5 instead of 3
     print(f"raw: {data}") 
     if data is not None:
         decoded_value=ads_int16_decode(data)
@@ -74,12 +75,15 @@ def ads_int16_decode(data):
 
 def get_device_address():
     global BEND_ADDRESS
-    sensor_type=read_i2c_block(0xA,3) # read device id
+    global NUM_BYTES
+    sensor_type=read_i2c_block(0xA,NUM_BYTES) # read device id
     print(f"{sensor_type}-axis sensor...")
-    if(sensor_type==0x1):
+    if(sensor_type[0]==0x1):
         BEND_ADDRESS=0x12
-    elif(sensor_type==0x2):
+        NUM_BYTES=3
+    elif(sensor_type[0]==0x2):
         BEND_ADDRESS==0x13
+        NUM_BYTES=5
 
 # time.sleep(5)
 # file_path = 'oled_2.csv'
@@ -101,8 +105,8 @@ try:
     time.sleep(0.1)
     print("Done with sensor init")
     print("Now, reading from sensor...")
-    # while(True):
-    for i in range (1,10):
+    while(True):
+    # for i in range (1,10):
         time.sleep(0.01)
         angle = read_sensor_data()
         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
