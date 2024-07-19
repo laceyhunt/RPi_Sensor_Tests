@@ -5,10 +5,10 @@ import RPi.GPIO as GPIO
 
 # I2C address and bus
 I2C_ADDRESS = 0x3C
-BEND_ADDRESS = 0x13
+BEND_ADDRESS = 0x12
 I2C_BUS = 1
 CHUNK_SIZE = 31  # Effective chunk size after accounting for the control byte
-NUM_BYTES=5
+NUM_BYTES=3
 reset_pin=27       
 bus = SMBus(I2C_BUS)
 # Function to read CSV and write hex values to I2C
