@@ -13,7 +13,7 @@ reset_pin=27
 bus = SMBus(I2C_BUS)
 # Function to read CSV and write hex values to I2C
 def read_hex_csv_and_write_i2c(file_path):
-    # bus = SMBus(I2C_BUS)
+    bus = SMBus(I2C_BUS)
     with open(file_path, mode='r') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
@@ -29,7 +29,6 @@ def read_hex_csv_and_write_i2c(file_path):
                         # Combine register address, control byte, and data chunk
                         message = i2c_msg.write(I2C_ADDRESS, [register_address] + chunk)
                         bus.i2c_rdwr(message)
-
 
 # init sensor
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
