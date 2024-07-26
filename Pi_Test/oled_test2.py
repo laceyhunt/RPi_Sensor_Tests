@@ -62,12 +62,13 @@ def read_sensor_data():
     # print(f"raw: {data}") 
     if data is not None:
         decoded_value1 = ads_int16_decode_single(data)
-        if(BEND_ADDRESS==0x12):
-            print(f"Decoded: {decoded_value1}      Raw: {data}")
-        if(BEND_ADDRESS==0x13):
-            decoded_value2 = ads_int16_decode_two(data)
-            # print(f"Decoded: {decoded_value2}")
-            print(f"Decoded: {decoded_value1}, {decoded_value2}      Raw: {data}")
+        # if(BEND_ADDRESS==0x12):
+        #     print(f"Decoded: {decoded_value1}      Raw: {data}")
+        # if(BEND_ADDRESS==0x13):
+        #     decoded_value2 = ads_int16_decode_two(data)
+        #     # print(f"Decoded: {decoded_value2}")
+        #     print(f"Decoded: {decoded_value1}, {decoded_value2}      Raw: {data}")
+        print(f"Decoded: {decoded_value1}      Raw: {data}")
         return decoded_value1
     else:
         return None
