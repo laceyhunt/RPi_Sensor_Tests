@@ -14,6 +14,7 @@ bus = SMBus(I2C_BUS)
 # Function to read CSV and write hex values to I2C
 def read_hex_csv_and_write_i2c(file_path):
     # bus = SMBus(I2C_BUS)
+    global bus
     with open(file_path, mode='r') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
@@ -29,6 +30,7 @@ def read_hex_csv_and_write_i2c(file_path):
                         # Combine register address, control byte, and data chunk
                         message = i2c_msg.write(I2C_ADDRESS, [register_address] + chunk)
                         bus.i2c_rdwr(message)
+    # bus.close()
 
 # init sensor
 GPIO.setmode(GPIO.BCM) # GPIO numbering 
@@ -40,9 +42,11 @@ time.sleep(2)
 print("done with GPIO and reset init")
 
 def write_i2c_block(address, data):
+    global bus
     bus.write_i2c_block_data(BEND_ADDRESS, address, data)
     time.sleep(0.01)  # Small delay to ensure the command is processed
 def read_i2c_block(address, length):
+    global bus
     try:
         return bus.read_i2c_block_data(BEND_ADDRESS, address, length)
     except OSError as e:
