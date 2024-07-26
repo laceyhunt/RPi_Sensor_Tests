@@ -133,15 +133,15 @@ try:
     print("Done with sensor init")
     print("Now, reading from sensor...")
     # while(True):
-    # for i in range (1,20):
-    #     time.sleep(0.01)
-    #     angle = read_sensor_data()
-    #     if(BEND_ADDRESS==0x12):
-    #         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
-    #     elif(BEND_ADDRESS==0x13):
-    #         write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
-    #     time.sleep(0.05)
-    # print("Read 20 samples.")
+    for i in range (1,20):
+        time.sleep(0.01)
+        angle = read_sensor_data()
+        if(BEND_ADDRESS==0x12):
+            write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+        elif(BEND_ADDRESS==0x13):
+            write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
+        time.sleep(0.05)
+    print("Read 20 samples.")
 
     time.sleep(5)
 
@@ -151,14 +151,14 @@ try:
     print("Done with second oled")
     # print("Running sensor...")
     # while(True):
-    # # for i in range (1,20):
-    #     time.sleep(0.01)
-    #     angle = read_sensor_data()
-    #     if(BEND_ADDRESS==0x12):
-    #         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
-    #     elif(BEND_ADDRESS==0x13):
-    #         write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
-    #     time.sleep(0.05)
+    for i in range (1,20):
+        time.sleep(0.01)
+        angle = read_sensor_data()
+        if(BEND_ADDRESS==0x12):
+            write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+        elif(BEND_ADDRESS==0x13):
+            write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
+        time.sleep(0.05)
 
 except KeyboardInterrupt:
     print("Program stopped, cleaning up...")
