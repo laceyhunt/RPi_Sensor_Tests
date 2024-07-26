@@ -32,7 +32,7 @@ def read_hex_csv_and_write_i2c(file_path):
 # Example usage
 file_path = 'oled_1.csv'
 read_hex_csv_and_write_i2c(file_path)
-time.sleep(5)
-# Example usage
-file_path = 'oled_2.csv'
-read_hex_csv_and_write_i2c(file_path)
+# time.sleep(5)
+# # Example usage
+# file_path = 'oled_2.csv'
+# read_hex_csv_and_write_i2c(file_path)
