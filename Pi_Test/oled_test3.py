@@ -25,7 +25,6 @@ def read_hex_csv_and_write_i2c(file_path):
                         # Combine register address, control byte, and data chunk
                         message = i2c_msg.write(I2C_ADDRESS, [register_address] + chunk)
                         bus.i2c_rdwr(message)
-                        print(f"{message}")
 
     bus.close()
 
