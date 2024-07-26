@@ -16,25 +16,52 @@ out_file = "output.txt"
 
 bus = SMBus(I2C_BUS)
 # Function to read CSV and write hex values to I2C
-def read_hex_csv_and_write_i2c(file_path):
-    # bus = SMBus(I2C_BUS)
-    global bus
-    with open(file_path, mode='r') as file:
-        csv_reader = csv.reader(file)
-        for row in csv_reader:
-            if len(row) > 1:  # Ensure there's a second column
-                hex_data = row[1].split()  # Split the space-separated hex values
-                if len(hex_data) > 1:
-                    register_address = int(hex_data[0], 16)  # First byte is the register address
-                    data_to_write = [int(hex_value, 16) for hex_value in hex_data[1:]]  # Rest are data bytes
+# def read_hex_csv_and_write_i2c(file_path):
+#     # bus = SMBus(I2C_BUS)
+#     global bus
+#     with open(file_path, mode='r') as file:
+#         csv_reader = csv.reader(file)
+#         for row in csv_reader:
+#             if len(row) > 1:  # Ensure there's a second column
+#                 hex_data = row[1].split()  # Split the space-separated hex values
+#                 if len(hex_data) > 1:
+#                     register_address = int(hex_data[0], 16)  # First byte is the register address
+#                     data_to_write = [int(hex_value, 16) for hex_value in hex_data[1:]]  # Rest are data bytes
 
-                    # Write the data in chunks if necessary
-                    for i in range(0, len(data_to_write), CHUNK_SIZE):
-                        chunk = data_to_write[i:i + CHUNK_SIZE]
-                        # Combine register address, control byte, and data chunk
-                        message = i2c_msg.write(I2C_ADDRESS, [register_address] + chunk)
-                        bus.i2c_rdwr(message)
-                        time.sleep(.001)
+#                     # Write the data in chunks if necessary
+#                     for i in range(0, len(data_to_write), CHUNK_SIZE):
+#                         chunk = data_to_write[i:i + CHUNK_SIZE]
+#                         # Combine register address, control byte, and data chunk
+#                         message = i2c_msg.write(I2C_ADDRESS, [register_address] + chunk)
+#                         bus.i2c_rdwr(message)
+#                         time.sleep(.001)
+#   trying to fix the error i was getting from line 28 ^
+def read_hex_csv_and_write_i2c(file_path):
+    try:
+        with open(file_path, mode='r') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                if len(row) > 1:  # Ensure there's a second column
+                    # Extract the hex data part
+                    hex_data = row[1].split()  # Split the space-separated hex values
+                    if len(hex_data) > 1:
+                        try:
+                            register_address = int(hex_data[0], 16)  # First byte is the register address
+                            data_to_write = [int(hex_value, 16) for hex_value in hex_data[1:]]  # Rest are data bytes
+
+                            # Write the data in chunks if necessary
+                            for i in range(0, len(data_to_write), CHUNK_SIZE):
+                                chunk = data_to_write[i:i + CHUNK_SIZE]
+                                # Combine register address and data chunk
+                                message = i2c_msg.write(I2C_ADDRESS, [register_address] + chunk)
+                                bus.i2c_rdwr(message)
+                                time.sleep(0.001)
+                        except ValueError as e:
+                            print(f"Skipping invalid hex data: {hex_data} with error: {e}")
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
+    except Exception as e:
+        print(f"An error occurred while reading the file: {e}")
     # bus.close()
 
 # init sensor
@@ -135,8 +162,8 @@ try:
         time.sleep(0.1)
         write_i2c_block(0x00, [1, 00])
         time.sleep(0.1)
-        write_i2c_block(0x04, [0x13, 00])   #CHANGE I2C ADDR
-        time.sleep(0.1)
+        # write_i2c_block(0x04, [0x13, 00])   #CHANGE I2C ADDR
+        # time.sleep(0.1)
     elif(BEND_ADDRESS==0x13):
         write_i2c_block(0x05, [1, 1, 0, 0])  # polled mode
         time.sleep(0.1)
