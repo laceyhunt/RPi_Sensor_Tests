@@ -52,7 +52,7 @@ def read_i2c_block(address, length):
     except OSError as e:
         print(f"Error reading I2C data: {e}")
         return None
-def read_sensor_data():
+def read_sensor_data(): 
     data = read_i2c_block(0x00, NUM_BYTES)  # Read 3 bytes from register 0x00, 5 instead of 3
     # print(f"raw: {data}") 
     if data is not None:
