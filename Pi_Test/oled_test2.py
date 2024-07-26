@@ -10,6 +10,10 @@ I2C_BUS = 1
 CHUNK_SIZE = 31  # Effective chunk size after accounting for the control byte
 NUM_BYTES=3
 reset_pin=27       
+
+# Specify the file path
+out_file = "output.txt"
+
 bus = SMBus(I2C_BUS)
 # Function to read CSV and write hex values to I2C
 def read_hex_csv_and_write_i2c(file_path):
@@ -119,7 +123,9 @@ try:
     # init oled
     file_path = 'oled_1.csv'
     read_hex_csv_and_write_i2c(file_path)
-    print("Done with oled init")
+    # print("Done with oled init")
+    with open(file_path, 'w') as file:
+        print("Done with oled init", file=file)
     # Sequence of writes to initialize the sensor
     if(BEND_ADDRESS==0x12):
         write_i2c_block(0x05, [1, 1])  # polled mode
@@ -128,6 +134,8 @@ try:
         time.sleep(0.1)
         write_i2c_block(0x00, [1, 00])
         time.sleep(0.1)
+        write_i2c_block(0x04, [0x13, 00])   #CHANGE I2C ADDR
+        time.sleep(0.1)
     elif(BEND_ADDRESS==0x13):
         write_i2c_block(0x05, [1, 1, 0, 0])  # polled mode
         time.sleep(0.1)
@@ -135,16 +143,19 @@ try:
         time.sleep(0.1)
         write_i2c_block(0x00, [1, 00, 00, 00])
         time.sleep(0.1)
-    print("Done with sensor init")
-    print("Now, reading from sensor...")
+    # print("Done with sensor init")
+    with open(file_path, 'w') as file:
+        print("Done with sensor init", file=file)
+        print("Now, reading from sensor...\n", file=file)
     # while(True):
     for i in range (1,20):
         time.sleep(0.01)
         angle = read_sensor_data()
-        if(BEND_ADDRESS==0x12):
-            write_i2c_block(0x00, [1, 00]) # RUN COMMAND
-        elif(BEND_ADDRESS==0x13):
-            write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
+        # if(BEND_ADDRESS==0x12):
+        #     write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+        # elif(BEND_ADDRESS==0x13):
+        #     write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
+        write_i2c_block(0x00, [1, 00]) # RUN COMMAND
         time.sleep(0.05)
     print("Read 20 samples.")
 
@@ -156,14 +167,14 @@ try:
     print("Done with second oled")
     # print("Running sensor...")
     # while(True):
-    for i in range (1,20):
-        time.sleep(0.01)
-        angle = read_sensor_data()
-        if(BEND_ADDRESS==0x12):
-            write_i2c_block(0x00, [1, 00]) # RUN COMMAND
-        elif(BEND_ADDRESS==0x13):
-            write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
-        time.sleep(0.05)
+    # for i in range (1,20):
+    #     time.sleep(0.01)
+    #     angle = read_sensor_data()
+    #     if(BEND_ADDRESS==0x12):
+    #         write_i2c_block(0x00, [1, 00]) # RUN COMMAND
+    #     elif(BEND_ADDRESS==0x13):
+    #         write_i2c_block(0x00, [1, 00, 00, 00]) # RUN COMMAND
+    #     time.sleep(0.05)
 
 except KeyboardInterrupt:
     print("Program stopped, cleaning up...")
