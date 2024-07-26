@@ -1,71 +1,71 @@
-import smbus
-from PIL import Image, ImageDraw, ImageFont
+import smbus2
+import time
 
-# Define I2C bus number (0 or 1, depending on your Raspberry Pi model)
-i2c_bus = 1  # Replace with 0 if using Raspberry Pi model prior to 4
-
-# Initialize I2C bus
-i2c = smbus.SMBus(i2c_bus)
-
-# SSD1306 display setup constants
-SSD1306_I2C_ADDR = 0x3C  # I2C address of the SSD1306 display
+# Constants
+I2C_ADDRESS = 0x3C  # Change this to your display's I2C address
 WIDTH = 128
 HEIGHT = 64
+CHUNK_SIZE = 32
 
-# SSD1306 display initialization sequence
-def ssd1306_init():
-    commands = [
-        0xAE,           # Display off
-        0xD5, 0x80,     # Set display clock divide ratio/oscillator frequency
-        0xA8, 0x3F,     # Set multiplex ratio (1 to 64)
-        0xD3, 0x00,     # Set display offset
-        0x40,           # Set start line address
-        0x8D, 0x14,     # Charge pump setting (0x14 enable charge pump)
-        0x20, 0x00,     # Set memory mode to horizontal addressing mode
-        0xA1,           # Set segment remap with column address 127 mapped to SEG0
-        0xC8,           # Set COM output scan direction, scan from COM63 to COM0
-        0xDA, 0x12,     # Set COM pins hardware configuration
-        0x81, 0xCF,     # Set contrast control
-        0xD9, 0xF1,     # Set pre-charge period
-        0xDB, 0x40,     # Set VCOMH deselect level
-        0xA4,           # Entire display on (resume to RAM content display)
-        0xA6,           # Set normal display (A7 for inverse display)
-        0xAF            # Display on
-    ]
+# Commands
+CMD_DISPLAY_OFF = 0xAE
+CMD_DISPLAY_ON = 0xAF
+CMD_SET_DISPLAY_CLOCK_DIV = 0xD5
+CMD_SET_MULTIPLEX = 0xA8
+CMD_SET_DISPLAY_OFFSET = 0xD3
+CMD_SET_START_LINE = 0x40
+CMD_CHARGE_PUMP = 0x8D
+CMD_MEMORY_MODE = 0x20
+CMD_SEG_REMAP = 0xA1
+CMD_COM_SCAN_DEC = 0xC8
+CMD_SET_CONTRAST = 0x81
+CMD_SET_PRECHARGE = 0xD9
+CMD_SET_VCOM_DETECT = 0xDB
+CMD_DISPLAY_ALL_ON_RESUME = 0xA4
+CMD_NORMAL_DISPLAY = 0xA6
 
-    for cmd in commands:
-        i2c.write_byte_data(SSD1306_I2C_ADDR, 0x00, cmd)
+# Initialization sequence for SSD1306
+init_sequence = [
+    CMD_DISPLAY_OFF,
+    CMD_SET_DISPLAY_CLOCK_DIV, 0x80,
+    CMD_SET_MULTIPLEX, HEIGHT - 1,
+    CMD_SET_DISPLAY_OFFSET, 0x00,
+    CMD_SET_START_LINE | 0x00,
+    CMD_CHARGE_PUMP, 0x14,
+    CMD_MEMORY_MODE, 0x00,
+    CMD_SEG_REMAP | 0x01,
+    CMD_COM_SCAN_DEC,
+    CMD_SET_CONTRAST, 0xCF,
+    CMD_SET_PRECHARGE, 0xF1,
+    CMD_SET_VCOM_DETECT, 0x40,
+    CMD_DISPLAY_ALL_ON_RESUME,
+    CMD_NORMAL_DISPLAY,
+    CMD_DISPLAY_ON
+]
 
-# Clear the SSD1306 display buffer
-def clear_display():
-    buffer = [0x00] * (WIDTH * HEIGHT // 8)  # Calculate total buffer size
-    chunk_size = 32  # Maximum chunk size for write_i2c_block_data
+# Create the bus
+bus = smbus2.SMBus(1)  # 1 indicates /dev/i2c-1
 
-    for i in range(0, len(buffer), chunk_size):
-        chunk = buffer[i:i + chunk_size]
-        if chunk:  # Ensure chunk is not empty
-            command = [0x40] + chunk  # 0x40 is the command to write data to RAM
-            i2c.write_i2c_block_data(SSD1306_I2C_ADDR, 0x00, command)
+def send_command(command):
+    bus.write_byte_data(I2C_ADDRESS, 0x00, command)
 
+def send_data(data):
+    for i in range(0, len(data), CHUNK_SIZE):
+        chunk = data[i:i + CHUNK_SIZE]
+        bus.write_i2c_block_data(I2C_ADDRESS, 0x40, chunk)
+        time.sleep(0.001)  # Short delay to ensure stability
 
+def initialize_display():
+    for cmd in init_sequence:
+        send_command(cmd)
+
+def set_all_pixels_white():
+    # Each pixel needs one bit, so we need 128 * 64 / 8 bytes
+    white_data = [0xFF] * (WIDTH * HEIGHT // 8)
+    send_data(white_data)
 
 # Initialize the display
-ssd1306_init()
+initialize_display()
 
-# Clear display buffer
-clear_display()
-
-# Create a blank image for the OLED
-image = Image.new("1", (WIDTH, HEIGHT))
-
-# Get drawing object to draw on image
-draw = ImageDraw.Draw(image)
-
-# Draw a white filled box to clear the image
-draw.rectangle((0, 0, WIDTH - 1, HEIGHT - 1), outline=255, fill=255)
-
-# Display image
-data = list(image.getdata())
-buffer = bytearray(data)
-
-i2c.write_i2c_block_data(SSD1306_I2C_ADDR, 0x40, buffer)
+# Set all pixels to white
+set_all_pixels_white()
