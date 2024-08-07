@@ -30,3 +30,5 @@ def change_addr():
     old=read_i2c_block(0x2,3)
     print(f"New Address={old}")
     time.sleep(0.1)
+
+change_addr()
