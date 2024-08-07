@@ -22,11 +22,12 @@ def read_i2c_block(address, length):
     
 def change_addr():
     global DEVICE_ADDRESS, NEW_ADDRESS
-    old=read_i2c_block(0x2,5)
+    old=read_i2c_block(0x2,3)
     print(f"Old Address={old}")
     time.sleep(0.1)
-    DEVICE_ADDRESS=NEW_ADDRESS
+    # DEVICE_ADDRESS=NEW_ADDRESS
     write_i2c_block(0x4, [NEW_ADDRESS,00])
+    DEVICE_ADDRESS=NEW_ADDRESS
     old=read_i2c_block(0x2,3)
     print(f"New Address={old}")
     time.sleep(0.1)
